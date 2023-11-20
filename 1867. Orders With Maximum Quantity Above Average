@@ -1,0 +1,13 @@
+with cte as 
+(SELECT
+                        order_id,
+                        max(quantity) as m_q,
+                        avg(quantity ) as avg_q
+FROM OrdersDetails
+GROUP BY order_id)
+
+
+select 
+        order_id
+from cte 
+where m_q > all(select avg_q from cte)
