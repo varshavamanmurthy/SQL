@@ -1,0 +1,38 @@
+# Write your MySQL query statement below
+#To find: Num of bank account for each salary
+#low salary -> < 20000
+#Average-> between [$20000, $50000]
+#High Salary -> > $50000
+
+
+
+SELECT
+        'Low Salary' as category,
+        SUM(CASE
+            WHEN income < 20000 THEN 1
+            ELSE 0
+        END) AS 'accounts_count'
+FROM accounts
+
+UNION
+
+SELECT
+        'Average Salary' as category,
+        SUM(CASE
+            WHEN income BETWEEN 20000 AND 50000 THEN 1
+            ELSE 0
+        END) AS 'Average Salary'
+FROM accounts
+
+UNION
+
+SELECT
+        'High Salary' as category,
+        SUM(CASE 
+            WHEN income > 50000 THEN  1
+            ELSE 0
+        END) AS 'High Salary'
+FROM accounts
+
+
+ 
