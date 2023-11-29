@@ -1,0 +1,16 @@
+# Write your MySQL query statement below
+#o/p: users_ID
+
+WITH cte AS(
+SELECT
+        user_id,
+        time_stamp,
+        LEAD(time_stamp) OVER(PARTITION BY user_id ORDER BY time_stamp) as next_time_stamp
+FROM Confirmations)
+
+
+SELECT 
+        DISTINCT user_id
+FROM cte
+WHERE TIMESTAMPDIFF(second, time_stamp, next_time_stamp)<=86400
+
