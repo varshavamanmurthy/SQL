@@ -1,0 +1,39 @@
+#no of experiments done of each platform
+with platform_cte as (
+SELECT 'IOS' As platform
+UNION
+SELECT 'Android' As platform
+UNION
+SELECT 'Web' As platform),
+
+experiement_name_cte as (
+SELECT 'Programming' As experiment_name 
+UNION
+SELECT 'Sports' As experiment_name 
+UNION
+SELECT 'Reading' As experiment_name 
+), 
+
+final_cte as(
+SELECT * FROM platform_cte  CROSS JOIN experiement_name_cte 
+order by platform),
+
+final_cte1 as(
+SELECT
+        platform,  
+        experiment_name,
+        count(experiment_id ) as num_experiements
+FROM Experiments 
+group by  platform,  experiment_name)
+
+
+SELECT
+        a.platform,
+        a.experiment_name,
+        CASE 
+            WHEN num_experiements  is NULL then 0
+        ELSE num_experiements 
+        END AS num_experiments
+FROM final_cte a LEFT JOIN final_cte1 b on a.platform = b.platform 
+and a.experiment_name = b.experiment_name
+
