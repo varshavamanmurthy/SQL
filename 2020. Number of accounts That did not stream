@@ -1,0 +1,14 @@
+#No of accounts  that bought a subscription in 2021 but did not have any streams.
+WITH CTE AS(
+SELECT
+        a.account_id,
+        a.start_date,
+        a.end_date,
+        b.stream_date
+FROM subscriptions a JOIN streams b on a.account_id = b.account_id
+WHERE (YEAR(a.start_date)=2021 OR YEAR(a.end_date)=2021) AND YEAR(b.stream_date)!=2021)
+
+
+SELECT
+        DISTINCT COUNT(*) AS accounts_count 
+FROM cte
