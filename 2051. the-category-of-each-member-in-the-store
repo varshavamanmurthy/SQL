@@ -1,0 +1,23 @@
+# # Write your MySQL query statement below
+WITH CTE AS(
+SELECT 
+        m.member_id,
+        m.name,
+        v.visit_date,
+        p.charged_amount,
+        (100 * COUNT(charged_amount) )/ COUNT(visit_date) AS converstion_rate
+        
+FROM members m LEFT JOIN visits v on m.member_id=v.member_id LEFT JOIN purchases p on  v.visit_id=p.visit_id
+GROUP BY m.member_id)
+
+SELECT
+       member_id,
+       name,
+       CASE 
+            WHEN converstion_rate >= 80 THEN 'Diamond'
+            WHEN converstion_rate>=50 AND  converstion_rate < 80 THEN 'Gold'
+            WHEN converstion_rate < 50 THEN 'Silver'
+            ELSE 'Bronze'
+       END AS category
+FROM cte
+
