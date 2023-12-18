@@ -1,0 +1,21 @@
+# Write your MySQL query statement below
+# Balance of each user after each transaction.
+
+WITH CTE AS(
+SELECT
+        account_id,
+        day, 
+        type,
+        CASE
+            WHEN type='Withdraw' THEN -1*amount
+            ELSE amount
+        END AS sign_amount
+FROM Transactions
+ORDER BY account_id, day)
+
+
+SELECT
+        account_id,
+        day,
+        SUM(sign_amount) OVER(PARTITION BY account_id ORDER BY account_id, day) as balance
+FROM cte;
