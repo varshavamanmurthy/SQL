@@ -1,0 +1,19 @@
+with ny as(
+SELECT 
+        *
+FROM NewYork 
+WHERE SCORE>=90),
+
+ca as(
+SELECT 
+        *
+FROM california 
+WHERE SCORE>=90)
+
+
+select 
+        CASE
+                WHEN  (SELECT COUNT(SCORE) FROM NY)  > (SELECT COUNT(SCORE) FROM CA)  THEN 'New York University'
+                WHEN  (SELECT COUNT(SCORE) FROM CA)  > (SELECT COUNT(SCORE) FROM NY)  THEN 'California University'
+                ELSE 'No Winner'
+        END AS winner
