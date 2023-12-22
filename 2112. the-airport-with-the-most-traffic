@@ -1,0 +1,28 @@
+# Write your MySQL query statement below
+WITH cte as
+(SELECT
+        departure_airport as airport_id,
+        flights_count 
+FROM flights
+UNION ALL
+SELECT
+        arrival_airport as airport_id,
+        flights_count 
+FROM flights),
+
+
+
+CTE1 AS(
+SELECT
+        *,
+        SUM(flights_count) OVER(PARTITION BY airport_id) as summ
+FROM cte)
+
+
+
+SELECT
+        DISTINCT airport_id FROM CTE1
+WHERE SUMM=(
+SELECT 
+        MAX(SUMM)
+FROM CTE1)
