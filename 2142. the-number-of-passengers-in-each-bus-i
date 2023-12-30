@@ -1,0 +1,26 @@
+# Write your MySQL query statement below
+WITH cte AS(
+SELECT
+        p.passenger_id,
+        p.arrival_time as passengers_arrival_time,
+        b.bus_id,
+        b.arrival_time as bus_arrival_time,
+        ROW_NUMBER() OVER(PARTITION BY p.passenger_id ORDER BY b.arrival_time) as row_num
+FROM passengers p JOIN buses b on p.arrival_time<=b.arrival_time
+ORDER BY passenger_id, bus_id),
+
+cte2 AS(
+SELECT
+        bus_id,
+        passenger_id
+FROM cte
+WHERE row_num=1)
+
+SELECT
+        a.bus_id,
+        count(b.passenger_id) as passengers_cnt 
+FROM buses a LEFT JOIN cte2 b ON a.bus_id=b.bus_id
+GROUP BY a.bus_id
+ORDER By a.bus_id 
+
+
