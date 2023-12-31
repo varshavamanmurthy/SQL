@@ -1,0 +1,26 @@
+use practice;
+
+create table measurements
+(measurement_id int,
+measurement_value float,
+measurement_time timestamp
+);
+
+insert into measurements values (131233,1109.51,'2022-07-10 09:00:00');
+insert into measurements values (135211,1662.74,'2022-07-10 11:00:00');
+insert into measurements values (523542,1246.24,'2022-07-10 13:15:00');
+insert into measurements values (143562,1124.50,'2022-07-11 15:00:00');
+insert into measurements values (346462,1234.14,'2022-07-11 16:45:00');
+
+WITH CTE AS(
+SELECT
+		*,
+        ROW_NUMBER() OVER(PARTITION BY DATE(measurement_time) ORDER BY measurement_time) AS row_num
+FROM measurements)
+
+SELECT 
+		TIMESTAMP(measurement_time) AS measurement_day,
+        ROUND(SUM(CASE WHEN row_num%2!=0 THEN measurement_value ELSE 0 END),2) AS ODD_SUM,
+        ROUND(SUM(CASE WHEN row_num%2=0 THEN measurement_value ELSE 0 END),2) AS EVEN_SUM
+FROM CTE
+GROUP BY DATE(measurement_time);
