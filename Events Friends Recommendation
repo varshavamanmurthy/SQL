@@ -1,0 +1,46 @@
+create table friendship_status
+(user_a_id int,
+user_b_id int,
+status  enum ('friends', 'not_friends')
+);
+
+insert into friendship_status values (111, 333, 'not_friends');
+insert into friendship_status values (222, 333, 'not_friends');
+insert into friendship_status values (333, 222, 'not_friends');
+insert into friendship_status values (222, 111, 'friends');
+insert into friendship_status values (111, 222, 'friends');
+insert into friendship_status values (333, 111, 'not_friends');
+
+select *
+from friendship_status;
+
+
+create table event_rsvp
+(user_id int,
+event_id int,
+event_type enum ('public', 'private'),
+attendance_status enum  ('going', 'maybe', 'not_going'),
+event_date date
+);
+
+insert into event_rsvp values (111, 567,'public','going' ,'2022-07-12');
+insert into event_rsvp values (222, 789,'private','going' ,'2022-07-15');
+insert into event_rsvp values (333, 789,'private','maybe' ,'2022-07-15');
+insert into event_rsvp values (111, 234,'private','not_going' ,'2022-07-18');
+insert into event_rsvp values (222, 234,'private','going' ,'2022-07-18');
+insert into event_rsvp values (333, 234,'private','going' ,'2022-07-18');
+
+-- friendship_status, event_rsvp
+with cte as(
+select
+		user_id 
+from event_rsvp
+WHERE event_type = 'private' and attendance_status in ('maybe', 'going')
+GROUP BY user_id
+HAVING count(event_type)>=2)
+
+SELECT 
+		a.user_id as user_a_id,
+        b.user_id as user_b_id
+FROM cte a JOIN cte b on a.user_id!=b.user_id;
+
