@@ -1,0 +1,18 @@
+with cte as(
+select 
+		a.caller_id as sender_id,
+		receiver_id,
+        b.country_id as sender_country,
+		c.country_id as receiver_country,
+        a.call_time,
+        CASE
+			WHEN b.country_id=c.country_id then 0
+            ELSE 1
+		END AS call_type
+from phone_calls a JOIN phone_info b on a.caller_id=b.caller_id 
+				   JOIN phone_info c on a.receiver_id = c.caller_id)
+                   
+                   
+select
+		ROUND((SUM(call_type)/COUNT(call_type))*100,1) as intrnl_calls_percentage
+from cte;
