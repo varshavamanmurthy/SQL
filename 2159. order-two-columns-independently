@@ -1,0 +1,18 @@
+with cte1 as(
+SELECT
+        first_col,
+        ROW_NUMBER() OVER(ORDER BY first_col) as row_num1
+FROM data
+),
+
+cte2 as(
+SELECT
+        second_col,
+        ROW_NUMBER() OVER(ORDER BY second_col DESC) as row_num2
+FROM data
+)
+
+select 
+       first_col,
+       second_col
+from cte1 JOIN cte2 on row_num1=row_num2;
