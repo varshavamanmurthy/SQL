@@ -1,0 +1,9 @@
+CREATE PROCEDURE getUserIDs(startDate DATE, endDate DATE, minAmount INT)
+BEGIN
+	  SELECT 
+            DISTINCT user_id
+      FROM purchases
+      WHERE (time_stamp >= TIMESTAMP(startDate) AND time_stamp <= TIMESTAMP(endDate)) AND amount>=minAmount
+      ORDER BY user_id;
+	
+END
