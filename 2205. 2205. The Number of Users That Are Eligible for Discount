@@ -1,0 +1,12 @@
+CREATE FUNCTION getUserIDs(startDate DATE, endDate DATE, minAmount INT) RETURNS INT
+BEGIN
+  RETURN (
+      # Write your MySQL query statement below.
+        SELECT
+                COUNT( DISTINCT user_id) as user_cnt
+        FROM purchases
+        WHERE (TIMESTAMP(time_stamp) >= startDate AND TIMESTAMP(time_stamp)<= endDate) AND
+              (amount >= minAmount)
+      
+  );
+END
