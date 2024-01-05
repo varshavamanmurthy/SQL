@@ -1,0 +1,11 @@
+with cte as(
+SELECT
+        distinct driver_id
+from rides)
+
+
+SELECT
+        a.driver_id,
+        count(b.passenger_id) as cnt
+FROM cte a LEFT JOIN rides b on a.driver_id = b.passenger_id
+GROUP BY a.driver_id
