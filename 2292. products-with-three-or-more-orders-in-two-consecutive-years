@@ -1,0 +1,15 @@
+# Write your MySQL query statement below
+#product ordered 3 or ,ore consecutive times in 2 years
+
+WITH CTE AS(
+SELECT
+        product_id,
+        YEAR(purchase_date) as year,
+        count(purchase_date) as cnt
+FROM orders 
+GROUP BY product_id, YEAR(purchase_date)
+HAVING count(purchase_date)>=3 )
+
+SELECT
+        DISTINCT a.product_id
+from cte a JOIN cte b on a.product_id=b.product_id and a.year-b.year=-1;
