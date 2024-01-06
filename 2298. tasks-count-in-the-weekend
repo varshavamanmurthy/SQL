@@ -1,0 +1,19 @@
+# Write your MySQL query statement below
+WITH cte AS(
+SELECT
+        *,
+        CASE
+            WHEN DAYNAME(submit_date) IN ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY') THEN 1
+            ELSE 0
+        END AS working,
+        CASE
+            WHEN DAYNAME(submit_date) IN ('SATURDAY', 'SUNDAY') THEN 1
+            ELSE 0
+        END AS weekend
+FROM tasks)
+
+
+SELECT
+        SUM(weekend) AS weekend_cnt,
+        SUM(working) AS working_cnt
+FROM cte
