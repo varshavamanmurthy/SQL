@@ -1,0 +1,19 @@
+# Write your MySQL query statement below
+WITH CTE AS(
+SELECT
+        *,
+        rank() OVER(PARTITION BY gender ORDER BY user_id) as rank1,
+        CASE
+            WHEN gender = 'female' THEN 1
+            WHEN gender = 'other' THEN 2
+            ELSE 3
+        END AS rank2
+FROM genders
+)
+
+SELECT
+        user_id,
+        gender
+FROM cte
+ORDER BY rank1, rank2
+
